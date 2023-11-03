@@ -65,12 +65,21 @@
 \end{abstract}
 
 \section{Introduction}
+Retrieval Augmented Generation (RAG) is a technique to combine information retrieval, with a text generator. I has been extensively studied over this last year the use of RAG with Large Language Models (LLMs), showing that it can substantially improve a model's performance \cite{ram2023context}. One particular aspect that this technique is allowing to improve is the models factuallity of its answers \cite{lewis2020retrieval}.
 
+Altough there has been some exploration on the use of LLMs in the legal domain \cite{chalkidis2020legal}, there has not been that much focus on the use of RAG techniques to enhance a model's abilities to perform on standarized legal benchmarks, such as LexGLUE \cite{chalkidis-etal-2022-lexglue}. For example, \cite{savelka2023explaining} uses a RAG technique with GPT-4 and empirically shows that it makes the model less prone to hallucinations and provides more factual answers when explaining legal concepts.
 
+Also, the model Mistral 7B \cite{jiang2023mistral} has arised as a potential state of the art in relatively small open source LLMs. It is able to outperform much bigger models in many domains, such as Llama 2 with 30B \cite{touvron2023llama}.
+
+This calls for the natural approach of combining RAG and Mistral 7B, into the LexGLUE benchmark. Considering the advances that this model and RAG can make in performance, it is not unrealistic to aim for a new state of the art in the LexGLUE benchmark.
 \section{Related Work}
-
+\subsection{Fine tuning large language models in the legal domain}
+\subsection{Retrieval augmented large language models in the legal domain}
 
 \section{Methods}
+We are using the open source framework of RETA-LLM \cite{liu2023reta} to enhance Mistral 7B with RAG capacities. This framework allows as to do a "\textit{plug-and-play}" approach, in which there is no need for fine-tuning the model to know how to use the external memory.
+
+For our external knowledge base, we are going to use data from the US and European Law, given that the LexGLUE benchmark is based in legal cases from the US and countries within Europe.
 
 
 \section{Results}
