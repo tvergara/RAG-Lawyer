@@ -3,13 +3,15 @@ from langchain.vectorstores import Chroma
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 import os
 
+PERSIST_DIRECTORY = "./models/chroma_db"
+
 
 def get_vector_store(model_name: str, name: str, pdf: str):
     embeddings = SentenceTransformerEmbeddings(model_name=model_name)
 
-    if os.path.exists("./models/chroma_db"):
+    if os.path.exists(PERSIST_DIRECTORY):
         store = Chroma(
-            persist_directory="./chroma_db",
+            persist_directory=PERSIST_DIRECTORY,
             embedding_function=embeddings,
             collection_name=name
         )
@@ -21,7 +23,7 @@ def get_vector_store(model_name: str, name: str, pdf: str):
         pages,
         embeddings,
         collection_name=name,
-        persist_directory="./models/chroma_db"
+        persist_directory=PERSIST_DIRECTORY
     )
     return store
 
