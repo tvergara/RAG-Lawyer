@@ -7,7 +7,7 @@ import os
 def get_vector_store(model_name: str, name: str, pdf: str):
     embeddings = SentenceTransformerEmbeddings(model_name=model_name)
 
-    if os.path.exists("./chroma_db"):
+    if os.path.exists("./models/chroma_db"):
         store = Chroma(
             persist_directory="./chroma_db",
             embedding_function=embeddings,
@@ -21,7 +21,7 @@ def get_vector_store(model_name: str, name: str, pdf: str):
         pages,
         embeddings,
         collection_name=name,
-        persist_directory="./chroma_db"
+        persist_directory="./models/chroma_db"
     )
     return store
 
@@ -30,5 +30,5 @@ if __name__ == "__main__":
     store = get_vector_store(
         model_name=model_name,
         name="basic-laws",
-        pdf='../data/basic-laws-book-2016.pdf')
+        pdf='./data/basic-laws-book-2016.pdf')
     print(store.similarity_search("law of the united states", k=5))
