@@ -29,6 +29,7 @@
 % However, it will improve the aesthetics of text in
 % the typewriter font.
 \usepackage{inconsolata}
+\usepackage{stfloats}
 
 % If the title and author information does not fit in the area allocated, uncomment the following
 %
@@ -61,7 +62,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-  Retrieval Augmentation provides the abilities to Large Language Models to access external information for them to generate more factual answers. Although the use of Retrieval Augmentation techniques has been intensely studied in the last year, a particular domain of legal domains has not been significantly studied, in comparison to other domains. In this paper, we explore the use of Retrieval Augmentation for the Mistral 7B model, which has surprised the open source community for its ability to supersede in performance models which are considerably larger. Through the use of the open source framework of RETA-LLM, we are able to add retrieval capabilities to the model. With this model, we are able to provide a new state of the art for the benchmark of LexGLUE.
+  Retrieval Augmentation provides the abilities to Large Language Models to access external information for them to generate more factual answers. Although the use of Retrieval Augmentation techniques has been intensely studied in the last year, a particular domain of legal domains has not been significantly studied, in comparison to other domains. In this paper, we explore the use of Retrieval Augmentation for the Mistral 7B model, which has surprised the open source community for its ability to supersede in performance models which are considerably larger. Through the use of the open source tools in LangChain, we are able to add retrieval capabilities to the model. With this model, we are might be able to a strong evaluation benchmark of LexGLUE. Currently, we are not able to get strong results, particularly for the choice of using a smaller 1.3B model called BLING. Before the final version, we expect to implement the use of Mistral 7B and get much stronger results. We make our code publicly available for reproducibility and auditability of the current development.\footnote{\href{https://github.com/tvergara/RAG-Lawyer}{https://github.com/tvergara/RAG-Lawyer}}
 \end{abstract}
 
 \section{Introduction}
@@ -73,21 +74,60 @@ Also, the model Mistral 7B \cite{jiang2023mistral} has arised as a potential sta
 
 This calls for the natural approach of combining RAG and Mistral 7B, into the LexGLUE benchmark. Considering the advances that this model and RAG can make in performance, it is not unrealistic to aim for a new state of the art in the LexGLUE benchmark.
 \section{Related Work}
-\subsection{Fine tuning large language models in the legal domain}
-\subsection{Retrieval augmented large language models in the legal domain}
-
+\subsection{LLMs in the legal domain}
+There has been much work into fine tuning models for the legal domain. One particular example is LEGAL-BERT  \cite{chalkidis2020legal}. This model currently holds the state-of-the-art in the LexGLUE benchmark.
+\subsection{RAG in the legal domain}
+There has been some work into the use of RAG techniques in the legal domain. For example, \cite{savelka2023explaining} uses a RAG technique with GPT-4 and empirically shows the model provides more factual answers when explaining legal concepts.
 \section{Methods}
-We are using the open source framework of RETA-LLM \cite{liu2023reta} to enhance Mistral 7B with RAG capacities. This framework allows as to do a "\textit{plug-and-play}" approach, in which there is no need for fine-tuning the model to know how to use the external memory.
+We are using the open source framework of \href{https://github.com/langchain-ai/langchain}{LangChain} to implement RAG techniques into open source models. Specifically, we are using the \href{https://github.com/chroma-core/chroma}{ChromaDB} tools inside of LangChain to implement a knowledge base in a vector database.
 
-For our external knowledge base, we are going to use data from the US and European Law, given that the LexGLUE benchmark is based in legal cases from the US and countries within Europe.
+We are using an embedding based on the model General Text Embeddings (GTE) \cite{li2023towards}. This is an open source embedding model which is currently state-of-the-art in language embeddings benchmarks.
+
+
+As of the moment, the information in the knowledge base is extracted from the Basic Laws book 2016 edition (found \href{https://www.archives.gov/files/about/laws/basic-laws-book-2016.pdf}{here}). We expect to add more knowledge sources before the end of the project.
+
+Currently the language model used is an instruction-finetuned version of Llama 1.3B \cite{touvron2023llama1} called BLING \cite{xia2023sheared}. This model is not very powerful, and we have seen that its results are rather underwhelming. This choice of model was due to the complications in running the Mistral 7B locally, which made local development considerably harder.
+
+We will change the model to Mistral 7B, as soon as we implement the differences to be able to run the code in a GPU environment in the IALab's cluster.
 
 
 \section{Results}
 
+As of the moment, the only benchmark inside of LexGLUE that we implemented for evaluation is the US Supreme Court dataset (\href{http://scdb.wustl.edu/}{SCOTUS}). It is a single-label multi-class classification task, where given a document (court opinion), the task is to predict the relevant issue areas. The results obtained for the model can be seen in Table 1.
+
+As mentioned before, the model's performance is quite poor, mostly due to the lack of capabilities in Llama 1.3B. This model is quite small in comparison to current LLMs and it is significantly undertrained aswell. Its poor performance is not an indicator of a bad approach, but rather an expected result.
+
+\begin{table*}[t]
+\centering
+\begin{tabular}{l|c|c|c|c|c|c}
+\hline
+\textbf{Dataset} & \textbf{ECtHR A} & \textbf{ECtHR B} & \textbf{SCOTUS} & \textbf{EUR-LEX} & \textbf{LEDGAR} & \textbf{UNFAIR-ToS} \\
+\hline
+\textbf{Model} & \(\mu\)-F1 / m-F1 & \(\mu\)-F1 / m-F1 & \(\mu\)-F1 / m-F1 & \(\mu\)-F1 / m-F1 & \(\mu\)-F1 / m-F1 & \(\mu\)-F1 / m-F1 \\
+\hline
+TFIDF+SVM & 62.6 / 48.9 & 73.0 / 63.8 & 74.0 / 64.4 & 63.4 / 47.9 & 87.0 / 81.4 & 94.7 / 75.0 \\
+BERT & 71.2 / 63.6 & 79.7 / 73.4 & 68.3 / 58.3 & 71.4 / 57.2 & 87.6 / 81.8 & 95.6 / 81.3 \\
+RoBERTa & 69.2 / 59.0 & 77.3 / 68.9 & 71.6 / 62.0 & 71.9 / 57.9 & 87.9 / 82.3 & 95.2 / 79.2 \\
+DeBERTa & 70.0 / 60.8 & 78.8 / 71.0 & 71.1 / 62.7 & 72.1 / 57.4 & 88.2 / 83.1 & 95.5 / 80.3 \\
+Longformer & 69.9 / 64.7 & 79.4 / 71.7 & 72.9 / 64.0 & 71.6 / 57.7 & 88.2 / 83.0 & 95.5 / 80.9 \\
+BigBird & 70.0 / 62.9 & 78.8 / 70.9 & 72.8 / 62.0 & 71.5 / 56.8 & 87.8 / 82.6 & 95.7 / 81.3 \\
+Legal-BERT & 70.0 / 64.0 & 80.4 / 74.7 & 76.4 / 66.5 & 72.1 / 57.4 & 88.2 / 83.0 & 96.0 / 83.0 \\
+CaseLaw-BERT & 69.8 / 62.9 & 78.8 / 70.3 & 76.6 / 65.9 & 70.7 / 56.6 & 88.3 / 83.0 & 96.0 / 82.3 \\
+  \textbf{RAG-Lawyer} &  &  & \textbf{21.9 / 02.9}&  &  &  \\
+\hline
+\end{tabular}
+\caption{Performance comparison of different models on legal datasets.}
+\end{table*}
+
 \section{Discussion}
+Although current results are not promising, we expect to see a significant improvement in performance once we are able to run the Mistral 7B model. We expect to see a strong evaluation in the LexGLUE benchmark, and we expect to see a significant improvement in the model's factuallity.
 
+We also need to write the scripts for each of the individual benchmarks in the LexGLUE benchmark. Due to the fact that the current model took more than 4 hours to complete the evaluation in the SCOTUS dataset, and considering that we need to use the Mistral 7B model, we are prioritizing the implementation of GPU use of the model, and parallel evaluation for several test cases, before actually implementing the other benchmarks.
 
-\section{Appendices}
+One disclaimer is that although we claimed that this might lead to a new state-of-the-art on the benchmark, this was highly misleading. The current evaluations on the benchmark were made exclusively with really small finetuned models. It is not a fair comparison to use an LLM as Mistral 7B for this dataset. If we would consider that to be fair, then using GPT-4 should also be fair. It would be unreasonable to expect that the Mistral 7B would be able to win against GPT-4, even with RAG techniques.
+
+Also, previously we proposed using the RETA-LLM framework \cite{liu2023reta}. We found that this framework was not as easy to use as the authors claimed. We found a much better experience in implementing RAG techniques using LangChain, which is the current standard for RAG in LLMs.
+
 
 
 % Entries for the entire Anthology, followed by custom entries

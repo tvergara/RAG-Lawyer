@@ -1,0 +1,92 @@
+\begin{thebibliography}{11}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Chalkidis et~al.(2020)Chalkidis, Fergadiotis, Malakasiotis, Aletras,
+  and Androutsopoulos}]{chalkidis2020legal}
+Ilias Chalkidis, Manos Fergadiotis, Prodromos Malakasiotis, Nikolaos Aletras,
+  and Ion Androutsopoulos. 2020.
+\newblock Legal-bert: The muppets straight out of law school.
+\newblock \emph{arXiv preprint arXiv:2010.02559}.
+
+\bibitem[{Chalkidis et~al.(2022)Chalkidis, Jana, Hartung, Bommarito,
+  Androutsopoulos, Katz, and Aletras}]{chalkidis-etal-2022-lexglue}
+Ilias Chalkidis, Abhik Jana, Dirk Hartung, Michael Bommarito, Ion
+  Androutsopoulos, Daniel Katz, and Nikolaos Aletras. 2022.
+\newblock \href {https://aclanthology.org/2022.acl-long.297} {{L}ex{GLUE}: A
+  benchmark dataset for legal language understanding in {E}nglish}.
+\newblock In \emph{Proceedings of the 60th Annual Meeting of the Association
+  for Computational Linguistics (Volume 1: Long Papers)}, pages 4310--4330,
+  Dublin, Ireland. Association for Computational Linguistics.
+
+\bibitem[{Jiang et~al.(2023)Jiang, Sablayrolles, Mensch, Bamford, Chaplot,
+  Casas, Bressand, Lengyel, Lample, Saulnier et~al.}]{jiang2023mistral}
+Albert~Q Jiang, Alexandre Sablayrolles, Arthur Mensch, Chris Bamford,
+  Devendra~Singh Chaplot, Diego de~las Casas, Florian Bressand, Gianna Lengyel,
+  Guillaume Lample, Lucile Saulnier, et~al. 2023.
+\newblock Mistral 7b.
+\newblock \emph{arXiv preprint arXiv:2310.06825}.
+
+\bibitem[{Lewis et~al.(2020)Lewis, Perez, Piktus, Petroni, Karpukhin, Goyal,
+  K{\"u}ttler, Lewis, Yih, Rockt{\"a}schel et~al.}]{lewis2020retrieval}
+Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir
+  Karpukhin, Naman Goyal, Heinrich K{\"u}ttler, Mike Lewis, Wen-tau Yih, Tim
+  Rockt{\"a}schel, et~al. 2020.
+\newblock Retrieval-augmented generation for knowledge-intensive nlp tasks.
+\newblock \emph{Advances in Neural Information Processing Systems},
+  33:9459--9474.
+
+\bibitem[{Li et~al.(2023)Li, Zhang, Zhang, Long, Xie, and
+  Zhang}]{li2023towards}
+Zehan Li, Xin Zhang, Yanzhao Zhang, Dingkun Long, Pengjun Xie, and Meishan
+  Zhang. 2023.
+\newblock Towards general text embeddings with multi-stage contrastive
+  learning.
+\newblock \emph{arXiv preprint arXiv:2308.03281}.
+
+\bibitem[{Liu et~al.(2023)Liu, Jin, Wang, Cheng, Dou, and Wen}]{liu2023reta}
+Jiongnan Liu, Jiajie Jin, Zihan Wang, Jiehan Cheng, Zhicheng Dou, and Ji-Rong
+  Wen. 2023.
+\newblock Reta-llm: A retrieval-augmented large language model toolkit.
+\newblock \emph{arXiv preprint arXiv:2306.05212}.
+
+\bibitem[{Ram et~al.(2023)Ram, Levine, Dalmedigos, Muhlgay, Shashua,
+  Leyton-Brown, and Shoham}]{ram2023context}
+Ori Ram, Yoav Levine, Itay Dalmedigos, Dor Muhlgay, Amnon Shashua, Kevin
+  Leyton-Brown, and Yoav Shoham. 2023.
+\newblock In-context retrieval-augmented language models.
+\newblock \emph{arXiv preprint arXiv:2302.00082}.
+
+\bibitem[{Savelka et~al.(2023)Savelka, Ashley, Gray, Westermann, and
+  Xu}]{savelka2023explaining}
+Jaromir Savelka, Kevin~D Ashley, Morgan~A Gray, Hannes Westermann, and Huihui
+  Xu. 2023.
+\newblock Explaining legal concepts with augmented large language models
+  (gpt-4).
+\newblock \emph{arXiv preprint arXiv:2306.09525}.
+
+\bibitem[{Touvron et~al.(2023{\natexlab{a}})Touvron, Lavril, Izacard, Martinet,
+  Lachaux, Lacroix, Rozière, Goyal, Hambro, Azhar, Rodriguez, Joulin, Grave,
+  and Lample}]{touvron2023llama1}
+Hugo Touvron, Thibaut Lavril, Gautier Izacard, Xavier Martinet, Marie-Anne
+  Lachaux, Timothée Lacroix, Baptiste Rozière, Naman Goyal, Eric Hambro,
+  Faisal Azhar, Aurelien Rodriguez, Armand Joulin, Edouard Grave, and Guillaume
+  Lample. 2023{\natexlab{a}}.
+\newblock \href {http://arxiv.org/abs/2302.13971} {Llama: Open and efficient
+  foundation language models}.
+
+\bibitem[{Touvron et~al.(2023{\natexlab{b}})Touvron, Martin, Stone, Albert,
+  Almahairi, Babaei, Bashlykov, Batra, Bhargava, Bhosale
+  et~al.}]{touvron2023llama}
+Hugo Touvron, Louis Martin, Kevin Stone, Peter Albert, Amjad Almahairi, Yasmine
+  Babaei, Nikolay Bashlykov, Soumya Batra, Prajjwal Bhargava, Shruti Bhosale,
+  et~al. 2023{\natexlab{b}}.
+\newblock Llama 2: Open foundation and fine-tuned chat models.
+\newblock \emph{arXiv preprint arXiv:2307.09288}.
+
+\bibitem[{Xia et~al.(2023)Xia, Gao, Zeng, and Chen}]{xia2023sheared}
+Mengzhou Xia, Tianyu Gao, Zhiyuan Zeng, and Danqi Chen. 2023.
+\newblock Sheared llama: Accelerating language model pre-training via
+  structured pruning.
+\newblock \emph{arXiv preprint arXiv:2310.06694}.
+
+\end{thebibliography}
