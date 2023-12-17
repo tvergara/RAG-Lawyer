@@ -1,6 +1,10 @@
 from models.rag_model import RagModel
 from datasets import load_dataset
 import json
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 
 TEMPLATE = """Below is a description of a court opinion. Please select the category that best matches the relevant issue area. The possible issue areas are:
 
@@ -64,7 +68,7 @@ def get_number(response: str) -> int:
 if __name__ == "__main__":
     model_name = "llmware/bling-sheared-llama-1.3b-0.1"
     store_model_name = "thenlper/gte-base"
-    pdf = '../data/basic-laws-book-2016.pdf'
+    pdf = './data/basic-laws-book-2016.pdf'
     vector_store_name = "basic-laws"
     rag = RagModel(
         model_name=model_name,
@@ -75,6 +79,8 @@ if __name__ == "__main__":
     )
 
     dataset = load_dataset("lex_glue", "scotus")['test']
+
+
 
     results = {}
     for i in range(len(dataset)):
