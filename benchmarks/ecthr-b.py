@@ -61,7 +61,7 @@ if __name__ == "__main__":
         template=TEMPLATE
     )
 
-    dataset = load_dataset("lex_glue", "ecthr_a")['test']
+    dataset = load_dataset("lex_glue", "ecthr_b")['test']
 
     results = {}
     for i in range(100):
@@ -75,7 +75,7 @@ if __name__ == "__main__":
 
         results[i] =  { 'true_label': dataset[i]['labels'], 'rag_label': numbers }
 
-    with open(f"rag_results_ecthr-a-k-{k}.json", 'w') as f:
+    with open(f"rag_results_ecthr-b-k-{k}.json", 'w') as f:
         json.dump(results, f)
 
 
