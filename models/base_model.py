@@ -22,8 +22,8 @@ class BaseLLM(LLM):
         self.init_models(device)
 
     def init_models(self, device):
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, cache_dir=CACHE_DIR)
-        self.model = AutoModelForCausalLM.from_pretrained(self.model_name, cache_dir=CACHE_DIR, load_in_4bit=True, device_map="auto")
+        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)#, cache_dir=CACHE_DIR)
+        self.model = AutoModelForCausalLM.from_pretrained(self.model_name)#, cache_dir=CACHE_DIR, load_in_4bit=True, device_map="auto")
         self.device = device
 
     @property

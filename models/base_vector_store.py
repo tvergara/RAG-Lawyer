@@ -8,6 +8,7 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 PERSIST_DIRECTORY = "./models/chroma_db"
 
+
 def get_vector_store(model_name: str, name: str, pdfs: list[str]):
     embeddings = SentenceTransformerEmbeddings(model_name=model_name)
 
