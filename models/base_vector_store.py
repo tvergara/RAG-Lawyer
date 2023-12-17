@@ -2,11 +2,13 @@ from langchain.document_loaders import PyPDFLoader
 from langchain.vectorstores import Chroma
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 import os
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 PERSIST_DIRECTORY = "./models/chroma_db"
 
-
-def get_vector_store(model_name: str, name: str, pdf: str):
+def get_vector_store(model_name: str, name: str, pdfs: list[str]):
     embeddings = SentenceTransformerEmbeddings(model_name=model_name)
 
     if os.path.exists(PERSIST_DIRECTORY):
@@ -17,8 +19,11 @@ def get_vector_store(model_name: str, name: str, pdf: str):
         )
         return store
 
-    loader = PyPDFLoader(pdf)
-    pages = loader.load_and_split()
+    pages = []
+    for pdf in pdfs:
+        loader = PyPDFLoader(pdf)
+        pages += loader.load_and_split()
+
     store = Chroma.from_documents(
         pages,
         embeddings,
@@ -32,5 +37,5 @@ if __name__ == "__main__":
     store = get_vector_store(
         model_name=model_name,
         name="basic-laws",
-        pdf='./data/basic-laws-book-2016.pdf')
-    print(store.similarity_search("law of the united states", k=5))
+        pdfs=['./data/basic-laws-book-2016.pdf', './data/european-human-rights.pdf'])
+    print(store.similarity_search("europe human rights", k=5))

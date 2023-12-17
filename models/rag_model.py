@@ -2,6 +2,10 @@ from models.base_model import BaseLLM
 from models.base_vector_store import get_vector_store
 from langchain.prompts import PromptTemplate
 from langchain.chains.question_answering import load_qa_chain
+import torch
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 
 class RagModel:
@@ -9,15 +13,16 @@ class RagModel:
             self,
             model_name: str,
             store_model_name: str,
-            pdf: str,
+            pdfs: list[str],
             vector_store_name: str,
-            template: str
+            template: str,
+            device: str
     ):
-        self.llm = BaseLLM(model_name=model_name)
+        self.llm = BaseLLM(model_name=model_name, device=device)
         self.vector_store = get_vector_store(
             model_name=store_model_name,
             name=vector_store_name,
-            pdf=pdf
+            pdfs=pdfs
         )
         template = template
         chain_prompt = PromptTemplate.from_template(template)
@@ -33,17 +38,20 @@ class RagModel:
 if __name__ == "__main__":
     model_name = "llmware/bling-sheared-llama-1.3b-0.1"
     store_model_name = "thenlper/gte-base"
-    pdf = './data/basic-laws-book-2016.pdf'
+    pdfs=['./data/basic-laws-book-2016.pdf', './data/european-human-rights.pdf']
     vector_store_name = "basic-laws"
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
     template = """Use the following pieces of context to answer the question at the end.
 {context}
 Question: {question}
 Helpful Answer: """
     rag = RagModel(
         model_name=model_name,
-        pdf=pdf,
+        pdfs=pdfs,
         store_model_name=store_model_name,
         vector_store_name=vector_store_name,
-        template=template
+        template=template,
+        device=device
     )
     print(rag("What year was the Atomic Energy Act created?"))
