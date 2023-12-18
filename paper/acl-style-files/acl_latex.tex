@@ -10,6 +10,7 @@
 % Standard package includes
 \usepackage{times}
 \usepackage{latexsym}
+\usepackage{graphicx}
 
 % For proper rendering and hyphenation of words containing Latin characters (including in bib files)
 \usepackage[T1]{fontenc}
@@ -37,7 +38,7 @@
 %
 % and set <dim> to something 5cm or larger.
 
-\title{Avoiding Perjury of Large Language Models using Retrieval Augmentation}
+\title{Avoiding Perjury of Large Language Models using Retrieval Augmentation?}
 
 % Author information can be set in various styles:
 % For several authors from the same institution:
@@ -62,7 +63,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-  Retrieval Augmentation provides the abilities to Large Language Models to access external information for them to generate more factual answers. Although the use of Retrieval Augmentation techniques has been intensely studied in the last year, a particular domain of legal domains has not been significantly studied, in comparison to other domains. In this paper, we explore the use of Retrieval Augmentation for the Mistral 7B model, which has surprised the open source community for its ability to supersede in performance models which are considerably larger. Through the use of the open source tools in LangChain, we are able to add retrieval capabilities to the model. With this model, we are might be able to a strong evaluation benchmark of LexGLUE. Currently, we are not able to get strong results, particularly for the choice of using a smaller 1.3B model called BLING. Before the final version, we expect to implement the use of Mistral 7B and get much stronger results. We make our code publicly available for reproducibility and auditability of the current development.\footnote{\href{https://github.com/tvergara/RAG-Lawyer}{https://github.com/tvergara/RAG-Lawyer}}
+  Retrieval Augmentation provides the abilities to Large Language Models to access external information for them to generate more factual answers. Although the use of Retrieval Augmentation techniques has been intensely studied in the last year, a particular domain of legal domains has not been significantly studied, in comparison to other domains. In this paper, we explore the use of Retrieval Augmentation for the Mistral 7B model, which has surprised the open source community for its ability to supersede in performance models which are considerably larger. Through the use of the open source tools in LangChain, we are able to add retrieval capabilities to the model. With this model, we are might be able to a strong evaluation benchmark of LexGLUE. We were not able to achieve results as strong as the baselines for LexGLUE. This was mostly due to the lack of several naive choices, which can be easily improved upon. Due to time restrictions on the deadline, we were not able to continue improving upon these results. We make our code publicly available for reproducibility and auditability of the results.\footnote{\href{https://github.com/tvergara/RAG-Lawyer}{https://github.com/tvergara/RAG-Lawyer}}
 \end{abstract}
 
 \section{Introduction}
@@ -72,6 +73,26 @@ Altough there has been some exploration on the use of LLMs in the legal domain \
 
 Also, the model Mistral 7B \cite{jiang2023mistral} has arised as a potential state of the art in relatively small open source LLMs. It is able to outperform much bigger models in many domains, such as Llama 2 with 30B \cite{touvron2023llama}.
 
+\begin{table*}[t]
+\centering
+\begin{tabular}{l|c|c|c|c|c|c}
+  \textbf{Dataset} & \textbf{ECtHR A} & \textbf{ECtHR B} & \textbf{SCOTUS} \\
+\hline
+\textbf{Model} & \(\mu\)-F1 / m-F1 & \(\mu\)-F1 / m-F1 & \(\mu\)-F1 / m-F1 \\
+\hline
+TFIDF+SVM & 62.6 / 48.9 & 73.0 / 63.8 & 74.0 / 64.4 \\
+BERT & 71.2 / 63.6 & 79.7 / 73.4 & 68.3 / 58.3 \\
+RoBERTa & 69.2 / 59.0 & 77.3 / 68.9 & 71.6 / 62.0 \\
+DeBERTa & 70.0 / 60.8 & 78.8 / 71.0 & 71.1 / 62.7 \\
+Longformer & 69.9 / 64.7 & 79.4 / 71.7 & 72.9 / 64.0 \\
+BigBird & 70.0 / 62.9 & 78.8 / 70.9 & 72.8 / 62.0 \\
+Legal-BERT & 70.0 / 64.0 & 80.4 / 74.7 & 76.4 / 66.5 \\
+CaseLaw-BERT & 69.8 / 62.9 & 78.8 / 70.3 & 76.6 / 65.9 \\
+  \textbf{RAG-Lawyer} & \textbf{45.1 / 38.6} & \textbf{45.5 / 39.1} & \textbf{34.6 / 21.0}\\
+\hline
+\end{tabular}
+\caption{Performance comparison of RAG-Lawyer to baselines.}
+\end{table*}
 This calls for the natural approach of combining RAG and Mistral 7B, into the LexGLUE benchmark. Considering the advances that this model and RAG can make in performance, it is not unrealistic to aim for a new state of the art in the LexGLUE benchmark.
 \section{Related Work}
 \subsection{LLMs in the legal domain}
@@ -84,50 +105,56 @@ We are using the open source framework of \href{https://github.com/langchain-ai/
 We are using an embedding based on the model General Text Embeddings (GTE) \cite{li2023towards}. This is an open source embedding model which is currently state-of-the-art in language embeddings benchmarks.
 
 
-As of the moment, the information in the knowledge base is extracted from the Basic Laws book 2016 edition (found \href{https://www.archives.gov/files/about/laws/basic-laws-book-2016.pdf}{here}). We expect to add more knowledge sources before the end of the project.
+The information in the knowledge base is extracted from the Basic Laws book 2016 edition (found \href{https://www.archives.gov/files/about/laws/basic-laws-book-2016.pdf}{here}), and the European Convention on Human Rights (found \href{https://www.echr.coe.int/documents/d/echr/convention_ENG}{here}).
 
-Currently the language model used is an instruction-finetuned version of Llama 1.3B \cite{touvron2023llama1} called BLING \cite{xia2023sheared}. This model is not very powerful, and we have seen that its results are rather underwhelming. This choice of model was due to the complications in running the Mistral 7B locally, which made local development considerably harder.
+Instead of Mistral 7B, we decided to jump straight ahead into a finetuned version of the model, to be able to follow instructions much more consistently. This language model was developed by Intel, using the Orca dataset \cite{mukherjee2023orca}, and using DPO \cite{rafailov2023direct}. This model is called \verb|Neural Chat 7B|.
 
-We will change the model to Mistral 7B, as soon as we implement the differences to be able to run the code in a GPU environment in the IALab's cluster.
+\section{Datasets}
+We evaluated on 3 out of the 7 tasks available on LexGLUE. This decision was not a design choice, but rather a miscalculation on the time it took to evaluate each task. When we realized that evaluating on the datasets actually took more than 4 hours in each run, we decided to remain more conservative on the number of tasks to evaluate, but prioritize an ablation study on the tasks, to understand better the effect of RAG techniques on these datasets.
+
+The datasets used were:
+\begin{itemize}
+    \item \textbf{SCOTUS:} A dataset based on the US Supreme Court cases. It is a single-label multi-class classification task, where given a court opinion, the task is to predict the relevant issue areas.
+    \item \textbf{ECtHR (Task A):} A dataset based on the European Court of Human Rights cases. It is a single-label multi-class classification task, where for each case, the dataset provides a list of factual paragraphs (facts) from the case description. Each case is mapped to articles of the ECHR that were violated (if any).
+    \item \textbf{ECtHR (Task B):} An updated version of the ECtHR Task A, but with new cases, and also with annotated rationals between cases' facts.
+\end{itemize}
 
 
 \section{Results}
 
-As of the moment, the only benchmark inside of LexGLUE that we implemented for evaluation is the US Supreme Court dataset (\href{http://scdb.wustl.edu/}{SCOTUS}). It is a single-label multi-class classification task, where given a document (court opinion), the task is to predict the relevant issue areas. The results obtained for the model can be seen in Table 1.
+A detailed description of our results can be found on Table 1.
 
-As mentioned before, the model's performance is quite poor, mostly due to the lack of capabilities in Llama 1.3B. This model is quite small in comparison to current LLMs and it is significantly undertrained aswell. Its poor performance is not an indicator of a bad approach, but rather an expected result.
 
-\begin{table*}[t]
-\centering
-\begin{tabular}{l|c|c|c|c|c|c}
-\hline
-\textbf{Dataset} & \textbf{ECtHR A} & \textbf{ECtHR B} & \textbf{SCOTUS} & \textbf{EUR-LEX} & \textbf{LEDGAR} & \textbf{UNFAIR-ToS} \\
-\hline
-\textbf{Model} & \(\mu\)-F1 / m-F1 & \(\mu\)-F1 / m-F1 & \(\mu\)-F1 / m-F1 & \(\mu\)-F1 / m-F1 & \(\mu\)-F1 / m-F1 & \(\mu\)-F1 / m-F1 \\
-\hline
-TFIDF+SVM & 62.6 / 48.9 & 73.0 / 63.8 & 74.0 / 64.4 & 63.4 / 47.9 & 87.0 / 81.4 & 94.7 / 75.0 \\
-BERT & 71.2 / 63.6 & 79.7 / 73.4 & 68.3 / 58.3 & 71.4 / 57.2 & 87.6 / 81.8 & 95.6 / 81.3 \\
-RoBERTa & 69.2 / 59.0 & 77.3 / 68.9 & 71.6 / 62.0 & 71.9 / 57.9 & 87.9 / 82.3 & 95.2 / 79.2 \\
-DeBERTa & 70.0 / 60.8 & 78.8 / 71.0 & 71.1 / 62.7 & 72.1 / 57.4 & 88.2 / 83.1 & 95.5 / 80.3 \\
-Longformer & 69.9 / 64.7 & 79.4 / 71.7 & 72.9 / 64.0 & 71.6 / 57.7 & 88.2 / 83.0 & 95.5 / 80.9 \\
-BigBird & 70.0 / 62.9 & 78.8 / 70.9 & 72.8 / 62.0 & 71.5 / 56.8 & 87.8 / 82.6 & 95.7 / 81.3 \\
-Legal-BERT & 70.0 / 64.0 & 80.4 / 74.7 & 76.4 / 66.5 & 72.1 / 57.4 & 88.2 / 83.0 & 96.0 / 83.0 \\
-CaseLaw-BERT & 69.8 / 62.9 & 78.8 / 70.3 & 76.6 / 65.9 & 70.7 / 56.6 & 88.3 / 83.0 & 96.0 / 82.3 \\
-  \textbf{RAG-Lawyer} &  &  & \textbf{21.9 / 02.9}&  &  &  \\
-\hline
-\end{tabular}
-\caption{Performance comparison of different models on legal datasets.}
-\end{table*}
+As we can see, the results are far away from the existing baselines, which is underwhelming. In the case of the SCOTUS dataset, out model does not even reach the 50\% of the accuracy reached by any of the other baselines used in the dataset. In the other datasets, our results are much closer, but still very far away to be considered "good" results.
+
+Although these results are not as good as we initially intended, we are not surprised. There is still a ton of work to be done to improve these results. In the discussion section we will delve deep into the details of how these results could be drastically improved.
+
+\section{Ablation study}
+We were interested in understanding the importance of the number of chunks retrieved from the knowledge base, into the performance of the model. We chose to do $n \in \{1, 2, 4\}$ number of chunks. Again, these choices were made mostly because running the inference on the tasks is costly in terms of time, so we could not really afford to extend our study to many more values. We did this evaluation in the tasks of the ECtHR. The figure 1 shows the results we obtained.
+
+\begin{figure}
+  \includegraphics[scale=0.32]{ablation.png}
+  \caption{Performance of RAG-Lawyer varying the number of retrieved chunks.}
+\end{figure}
+
+One interesting point is that consistently, the most performant number of retrieved chunks is 1. It is entirely possible that the first chunk is the only one particularly relevant for the objective. The ECtHR datasets are prompted to ask if a particular right was effectively violated, so in theory the retrieval process might be just getting the description of that right into memory, and then doing the inference. That way, other context that it is added later is much less necessary in comparison to the first chunk. The extra chunks might end up adding noise to the prompt, making it have a worse prediction.
 
 \section{Discussion}
-Although current results are not promising, we expect to see a significant improvement in performance once we are able to run the Mistral 7B model. We expect to see a strong evaluation in the LexGLUE benchmark, and we expect to see a significant improvement in the model's factuallity.
+Although current results are not promising, we made several choices that we believe to be severely limiting the potential of the model using RAG techniques. A non extensive list of \textit{improvable} choices are:
+\begin{itemize}
+  \item \textbf{Prompts}: The prompts were very naively designed, and not very calibrated at all. Additionally we could try more techniques such as \textit{Chain-of-thought} \cite{wei2022chain} to elicit explicit reasoning.
+  \item \textbf{External knowledge}: Again, the external knowledge bases were very naively chosen, and might be further optimized. In particular, the Basic Laws (2016) book has information which is very general in terms of legal reasoning, and is hard to extract chunks of information that may be useful for the tasks.
+  \item \textbf{Complete context}: Due to GPU memory constraints in the IALab cluster, actually fitting all the context of the legal cases into a single forward pass of the model was not feasible. We had to truncate the context to 1000 tokens only, which ignores a lot of information which is potentially useful to the tasks.
+  \item \textbf{In depth analysis of chunk size}: Naively, the chunk size was by default chosen to be 100 characters, and this was never then tried with another value.
+\end{itemize}
 
-We also need to write the scripts for each of the individual benchmarks in the LexGLUE benchmark. Due to the fact that the current model took more than 4 hours to complete the evaluation in the SCOTUS dataset, and considering that we need to use the Mistral 7B model, we are prioritizing the implementation of GPU use of the model, and parallel evaluation for several test cases, before actually implementing the other benchmarks.
 
-One disclaimer is that although we claimed that this might lead to a new state-of-the-art on the benchmark, this was highly misleading. The current evaluations on the benchmark were made exclusively with really small finetuned models. It is not a fair comparison to use an LLM as Mistral 7B for this dataset. If we would consider that to be fair, then using GPT-4 should also be fair. It would be unreasonable to expect that the Mistral 7B would be able to win against GPT-4, even with RAG techniques.
+Again, these decisions were far from perfect, and were planned for them to be fixed. However, we underestimated the development time that took to be able to run a 7B model in the cluster, without problems of storage or GPU memory. This significantly set back our development much into the final ours of the deadline.
 
-Also, previously we proposed using the RETA-LLM framework \cite{liu2023reta}. We found that this framework was not as easy to use as the authors claimed. We found a much better experience in implementing RAG techniques using LangChain, which is the current standard for RAG in LLMs.
+We still expect to be able to reach competent results by using a finetuned version of Mistral 7B, with RAG techniques. However, we did notice a mistake in our initial beliefs. Initially, we thought that legal benchmarks mostly rely on the recall of factual associations regarding different laws around the world. However, what we found is that these datasets tended to evaluate \textit{legal reasoning} much more than \textit{legal recall}. In this sense, RAG techniques do not show as an important of an improvement as we initially expected. Despite that, considering the strength of Mistral 7B, it can probably reach good results in LexGLUE, even without RAG techniques (just with some manual iteration to get a performant prompt).
 
+\section{Conclusion}
+In this work, we present the results of evaluating a finetuned version of Mistral 7B (Neural Chat 7B) on 3 out of the 7 tasks of LexGLUE, using RAG techniques. We found that our results are considerably worse than the existing baselines, but we expect this to be mostly due to the lack of optimization in various design choices made (prompts, external knowledge documents, context given, chunk size chosen). We do find an interesting result, in that the optimal number of chunks retrieved from the external knowledge is consistently 1, maybe indicating that additional chunks may be adding more noise than information.
 
 
 % Entries for the entire Anthology, followed by custom entries
@@ -135,5 +162,24 @@ Also, previously we proposed using the RETA-LLM framework \cite{liu2023reta}. We
 
 \appendix
 
+\section{Appendix}
 
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+Task & n & Macro-F1 & Micro-F1 \\
+\hline
+ECtHR-a & 1 & 45.11 & 38.58 \\
+ECtHR-a & 2 & 34.76 & 30.43 \\
+ECtHR-a & 4 & 34.36 & 31.40 \\
+ECtHR-b & 1 & 45.54 & 39.11 \\
+ECtHR-b & 2 & 37.60 & 33.80 \\
+ECtHR-b & 4 & 37.69 & 32.16 \\
+\hline
+\end{tabular}
+\caption{Macro and Micro F1 scores for RAG-Lawyer with different number of chunks retrieved}
+\label{tab:my_label}
+\end{table}
 \end{document}

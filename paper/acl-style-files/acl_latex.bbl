@@ -1,4 +1,4 @@
-\begin{thebibliography}{11}
+\begin{thebibliography}{12}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 
 \bibitem[{Chalkidis et~al.(2020)Chalkidis, Fergadiotis, Malakasiotis, Aletras,
@@ -49,6 +49,21 @@ Jiongnan Liu, Jiajie Jin, Zihan Wang, Jiehan Cheng, Zhicheng Dou, and Ji-Rong
 \newblock Reta-llm: A retrieval-augmented large language model toolkit.
 \newblock \emph{arXiv preprint arXiv:2306.05212}.
 
+\bibitem[{Mukherjee et~al.(2023)Mukherjee, Mitra, Jawahar, Agarwal, Palangi,
+  and Awadallah}]{mukherjee2023orca}
+Subhabrata Mukherjee, Arindam Mitra, Ganesh Jawahar, Sahaj Agarwal, Hamid
+  Palangi, and Ahmed Awadallah. 2023.
+\newblock Orca: Progressive learning from complex explanation traces of gpt-4.
+\newblock \emph{arXiv preprint arXiv:2306.02707}.
+
+\bibitem[{Rafailov et~al.(2023)Rafailov, Sharma, Mitchell, Ermon, Manning, and
+  Finn}]{rafailov2023direct}
+Rafael Rafailov, Archit Sharma, Eric Mitchell, Stefano Ermon, Christopher~D
+  Manning, and Chelsea Finn. 2023.
+\newblock Direct preference optimization: Your language model is secretly a
+  reward model.
+\newblock \emph{arXiv preprint arXiv:2305.18290}.
+
 \bibitem[{Ram et~al.(2023)Ram, Levine, Dalmedigos, Muhlgay, Shashua,
   Leyton-Brown, and Shoham}]{ram2023context}
 Ori Ram, Yoav Levine, Itay Dalmedigos, Dor Muhlgay, Amnon Shashua, Kevin
@@ -64,29 +79,21 @@ Jaromir Savelka, Kevin~D Ashley, Morgan~A Gray, Hannes Westermann, and Huihui
   (gpt-4).
 \newblock \emph{arXiv preprint arXiv:2306.09525}.
 
-\bibitem[{Touvron et~al.(2023{\natexlab{a}})Touvron, Lavril, Izacard, Martinet,
-  Lachaux, Lacroix, Rozière, Goyal, Hambro, Azhar, Rodriguez, Joulin, Grave,
-  and Lample}]{touvron2023llama1}
-Hugo Touvron, Thibaut Lavril, Gautier Izacard, Xavier Martinet, Marie-Anne
-  Lachaux, Timothée Lacroix, Baptiste Rozière, Naman Goyal, Eric Hambro,
-  Faisal Azhar, Aurelien Rodriguez, Armand Joulin, Edouard Grave, and Guillaume
-  Lample. 2023{\natexlab{a}}.
-\newblock \href {http://arxiv.org/abs/2302.13971} {Llama: Open and efficient
-  foundation language models}.
-
-\bibitem[{Touvron et~al.(2023{\natexlab{b}})Touvron, Martin, Stone, Albert,
-  Almahairi, Babaei, Bashlykov, Batra, Bhargava, Bhosale
-  et~al.}]{touvron2023llama}
+\bibitem[{Touvron et~al.(2023)Touvron, Martin, Stone, Albert, Almahairi,
+  Babaei, Bashlykov, Batra, Bhargava, Bhosale et~al.}]{touvron2023llama}
 Hugo Touvron, Louis Martin, Kevin Stone, Peter Albert, Amjad Almahairi, Yasmine
   Babaei, Nikolay Bashlykov, Soumya Batra, Prajjwal Bhargava, Shruti Bhosale,
-  et~al. 2023{\natexlab{b}}.
+  et~al. 2023.
 \newblock Llama 2: Open foundation and fine-tuned chat models.
 \newblock \emph{arXiv preprint arXiv:2307.09288}.
 
-\bibitem[{Xia et~al.(2023)Xia, Gao, Zeng, and Chen}]{xia2023sheared}
-Mengzhou Xia, Tianyu Gao, Zhiyuan Zeng, and Danqi Chen. 2023.
-\newblock Sheared llama: Accelerating language model pre-training via
-  structured pruning.
-\newblock \emph{arXiv preprint arXiv:2310.06694}.
+\bibitem[{Wei et~al.(2022)Wei, Wang, Schuurmans, Bosma, Xia, Chi, Le, Zhou
+  et~al.}]{wei2022chain}
+Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Fei Xia, Ed~Chi, Quoc~V
+  Le, Denny Zhou, et~al. 2022.
+\newblock Chain-of-thought prompting elicits reasoning in large language
+  models.
+\newblock \emph{Advances in Neural Information Processing Systems},
+  35:24824--24837.
 
 \end{thebibliography}
